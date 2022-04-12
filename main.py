@@ -1,24 +1,60 @@
-# This is a sample Python script.
-from typing import Dict, List
-
-import requests
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+from dataclasses import dataclass
+from typing import NamedTuple
+from collections import namedtuple
+import pytest
 
 
-def main():
-
-    params = dict(q='Sausages', format='json')
-    parsed: Dict = requests.get('http://api.duckduckgo.com/', params=params).json()
-
-    results: List = parsed['RelatedTopics']
-    for r in results:
-        if 'Text' in r:
-            print(r['FirstURL'] + ' - ' + r['Text'])
+@dataclass(frozen=True)
+class Name:
+    first_name: str
+    surname: str
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    main()
+class Money(NamedTuple):
+    currency: str
+    value: int
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    def __add__(self, other):
+        if other.currency != self.currency:
+            raise ValueError(f"Cannot add {self.currency} to {other.currency}")
+        return Money(self.currency, self.value + other.value)
+
+    def __sub__(self, other):
+        if other.currency != self.currency:
+            raise ValueError(f"Cannot add {self.currency} to {other.currency}")
+        return Money(self.currency, self.value - other.value)
+
+
+
+
+Line = namedtuple('Line', ['sku', 'qty'])
+
+fiver = Money('gbp', 5)
+tenner = Money('gbp', 10)
+
+def test_equality():
+    assert Money('gbp', 10) == Money('gbp', 10)
+    assert Name('Harry', 'Percival') != Name('Bob', 'Gregory')
+    assert Line('RED-CHAIR', 5) == Line('RED-CHAIR', 5)
+
+
+def test_can_add_money_values_for_the_same_currency():
+    assert fiver + fiver == tenner
+
+
+def test_can_subtract_money_values():
+    assert tenner - fiver == fiver
+
+
+def test_adding_different_currencies_fails():
+    with pytest.raises(ValueError):
+        Money('usd', 10) + Money('gbp', 10)
+
+
+def test_can_multiply_money_by_a_number():
+    assert fiver * 5 == Money('gbp', 25)
+
+
+def test_multiplying_two_money_values_is_an_error():
+    with pytest.raises(TypeError):
+        tenner * fiver

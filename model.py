@@ -1,11 +1,9 @@
 from __future__ import annotations
+
+import datetime
 from dataclasses import dataclass
 from datetime import date
-from typing import Optional, List, Set, NewType
-
-Quantity = NewType("Quantity", int)
-Sku = NewType("Sku", str)
-Reference = NewType("Reference", str)
+from typing import Optional, List, Set
 
 
 class OutOfStock(Exception):
@@ -29,7 +27,7 @@ class OrderLine:
 
 
 class Batch:
-    def __init__(self, ref: Reference, sku: Sku, qty: Quantity, eta: Optional[date]):
+    def __init__(self, ref: str, sku: str, qty: int, eta: Optional[date]):
         self.reference = ref
         self.sku = sku
         self.eta = eta
@@ -72,3 +70,9 @@ class Batch:
 
     def can_allocate(self, line: OrderLine) -> bool:
         return self.sku == line.sku and self.available_quantity >= line.qty
+
+in_stock_batch = Batch("in_stock_batch", "RETRO-CLOCK", 100, eta=None)
+shipment_batch = Batch("shipment_batch", 'RETRO-CLOCK', 100, eta=datetime.date.today())
+line = OrderLine("oref", "RETRO-CLOCK", 10)
+ref = allocate(line, [in_stock_batch, shipment_batch])
+print(ref)
