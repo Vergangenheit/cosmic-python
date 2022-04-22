@@ -1,2 +1,3 @@
 requests
 pytest
+sqlalchemy==1.4.35
