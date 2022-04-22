@@ -71,8 +71,3 @@ class Batch:
     def can_allocate(self, line: OrderLine) -> bool:
         return self.sku == line.sku and self.available_quantity >= line.qty
 
-in_stock_batch = Batch("in_stock_batch", "RETRO-CLOCK", 100, eta=None)
-shipment_batch = Batch("shipment_batch", 'RETRO-CLOCK', 100, eta=datetime.date.today())
-line = OrderLine("oref", "RETRO-CLOCK", 10)
-ref = allocate(line, [in_stock_batch, shipment_batch])
-print(ref)
