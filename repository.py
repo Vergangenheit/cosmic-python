@@ -12,8 +12,9 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get(self, reference):
+    def get(self, reference: str) -> model.Batch:
         raise NotImplementedError
+
 
 class SqlRepository(AbstractRepository):
     def __init__(self, session: Session):
@@ -22,7 +23,7 @@ class SqlRepository(AbstractRepository):
     def add(self, batch: model.Batch):
         self.session.add(batch)
 
-    def get(self, reference) -> model.Batch:
+    def get(self, reference: str) -> model.Batch:
         return self.session.query(model.Batch).filter_by(reference=reference).one()
 
     def list(self) -> List[model.Batch]:
