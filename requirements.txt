@@ -1,3 +1,4 @@
 requests
 pytest
 sqlalchemy==1.4.35
+flask==2.1.2
