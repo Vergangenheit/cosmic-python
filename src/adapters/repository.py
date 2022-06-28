@@ -3,7 +3,7 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-import model
+from src.domain import model
 
 
 class AbstractRepository(abc.ABC):
@@ -13,6 +13,10 @@ class AbstractRepository(abc.ABC):
 
     @abc.abstractmethod
     def get(self, reference: str) -> model.Batch:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def list(self) -> List:
         raise NotImplementedError
 
 

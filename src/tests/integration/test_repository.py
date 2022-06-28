@@ -1,9 +1,8 @@
 from typing import List
 
-import model
-import repository
+from src.adapters import repository
+from src.domain import model
 from sqlalchemy.engine.result import Result
-from sqlalchemy.orm.session import Session
 
 
 def test_repository_can_save_a_batch(session):

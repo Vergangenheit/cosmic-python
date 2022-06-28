@@ -1,6 +1,6 @@
 import time
 from pathlib import Path
-from typing import Generator, Any, Set, Tuple, List, Optional
+from typing import Generator, Tuple, List, Optional
 
 import requests
 from requests import Response
@@ -12,9 +12,8 @@ from sqlalchemy.engine.mock import MockConnection
 from sqlalchemy.orm import sessionmaker, clear_mappers
 from sqlalchemy.orm.session import Session
 
-import config
-from model import OrderLine
-from orm import metadata, start_mappers
+from src import config
+from src.adapters.orm import metadata, start_mappers
 
 
 def wait_for_postgres_to_come_up(engine: Engine) -> Optional[Connection]:
