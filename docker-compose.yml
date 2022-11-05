@@ -19,8 +19,14 @@ services:
 
   postgres:
     image: postgres:9.6
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=allocation
       - POSTGRES_PASSWORD=abc123
+      - POSTGRES_DB=postgres
     ports:
       - "54321:5432"
+
+volumes:
+  postgres_data:

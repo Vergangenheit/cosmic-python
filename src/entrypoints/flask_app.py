@@ -14,13 +14,20 @@ from src.service_layer import services
 from src.domain.model import Batch
 from src.adapters import repository, orm
 
-orm.start_mappers()
+# orm.start_mappers()
 get_session = sessionmaker(bind=create_engine(config.get_postgres_uri()))
 app = Flask(__name__)
 
 
 def is_valid_sku(sku: str, batches: List[Batch]) -> bool:
     return sku in {b.sku for b in batches}
+
+
+@app.route("/create_db", methods=["GET"])
+def create_db():
+    if request.method == "GET":
+        orm.start_mappers()
+        return {"message": "tables created"}, 200
 
 
 @app.route("/", methods=["GET"])

@@ -1,8 +1,10 @@
 from sqlalchemy.orm import mapper, relationship
+from sqlalchemy.engine import create_engine
 from sqlalchemy import MetaData, Table, Column, Integer, String, Date, ForeignKey
 from src.domain import model
+from src.config import get_postgres_uri
 
-metadata = MetaData()
+metadata = MetaData(create_engine(get_postgres_uri()))
 
 order_lines = Table(
     "order_lines",
@@ -41,3 +43,4 @@ def start_mappers() -> None:
                    lines_mapper, secondary=allocations, collection_class=set,
                )
            }, )
+    metadata.create_all(create_engine(get_postgres_uri()))
